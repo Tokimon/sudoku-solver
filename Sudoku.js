@@ -8,14 +8,30 @@ export default class Sudoku {
     this.init();
   }
 
+  /**
+   * Determines whether a number (from a tile) is solved or not.
+   * (Syntactic helper function to uniform this check)
+   *
+   * @param num {int|array}
+   * @returns {boolean}
+   */
   static isNumberSolved( num ) {
     return !Array.isArray(num) && num !== 0;
   }
 
+  /**
+   * Flatten an array to just one long string of numbers.
+   *
+   * @param arr {array}
+   * @returns {string}
+   */
   static flatten( arr ) {
     return arr.map((sub) => { return Array.isArray(sub) ? sub.join(',') : sub; }).join(',')
   }
 
+  /**
+   * Run initial run through of the grid replacing 0 with a list of possible choices
+   */
   init() {
     this.lookUpGrid((num, tile) => {
       if( num === 0 ) {
@@ -27,6 +43,11 @@ export default class Sudoku {
     });
   }
 
+  /**
+   * Try to solve the grid.
+   *
+   * @returns {array}
+   */
   solve() {
     // We check right away that the Sudoku has been solved or not.
     if( this.isSolved() ) {
@@ -58,6 +79,11 @@ export default class Sudoku {
     return this.guess();
   }
 
+  /**
+   * Overrides the default 'Object.toString()' method, to give a clearer representation of the grid
+   *
+   * @returns {string}
+   */
   toString() {
     let x = 0, y = 0;
 
@@ -84,6 +110,11 @@ export default class Sudoku {
 `;
   }
 
+  /**
+   * Like 'toString()' but shows possible values for unsolved fields
+   *
+   * @returns {string}
+   */
   showGrid() {
     const sizes = this.grid.reduce((arr, row) => {
       row.forEach((cell, j) => {
@@ -118,6 +149,11 @@ export default class Sudoku {
         .join('\n') + `\n${line}`;
   }
 
+  /**
+   * Validates that the board has been completed correctly
+   *
+   * @returns {boolean}
+   */
   validate() {
     let x=0, y=0;
 
@@ -134,6 +170,12 @@ export default class Sudoku {
     return true;
   }
 
+  /**
+   * Validates designated 3x3 square.
+   *
+   * @param tile {array}
+   * @returns {boolean}
+   */
   validateSquare( tile ) {
     const nums = this.squareNumbers(tile, true);
 
@@ -144,8 +186,16 @@ export default class Sudoku {
       arr.push(i);
       return arr;
     },[]);
+
+    return true;
   }
 
+  /**
+   * Validates designated row
+   *
+   * @param tile {array}
+   * @returns {boolean}
+   */
   validateRow( tile ) {
     const nums = this.rowNumbers(tile, true);
     if( nums.length < 9 ) { throw new Error(`Row not completed: ${tile}`); }
@@ -155,8 +205,16 @@ export default class Sudoku {
       arr.push(i);
       return arr;
     },[]);
+
+    return true;
   }
 
+  /**
+   * Validates designated column
+   *
+   * @param tile {array}
+   * @returns {boolean}
+   */
   validateColumn( tile ) {
     const nums = this.columnNumbers(tile, true);
 
@@ -167,24 +225,45 @@ export default class Sudoku {
       arr.push(i);
       return arr;
     },[]);
+
+    return true;
   }
 
+  /**
+   * Indicates whether or not the grid has been solved
+   *
+   * @returns {boolean}
+   */
   isSolved() {
     return this.unsolvedNumbers().length === 0;
   }
 
+  /**
+   * Indicates whether the designated tile has been solved (filled with a number between 1 and 9) or not
+   *
+   * @param tile {array}
+   * @returns {boolean}
+   */
   isTileSolved(tile) {
     return Sudoku.isNumberSolved(this.tileNumber(tile));
   }
 
+  /**
+   * Loop through each tile in the grid and try to solve the tiles (by filtering out suggestions)
+   */
   loopGrid() {
-    this.lookUpGrid((num, tile) => {
-      if( !Sudoku.isNumberSolved(num) ) {
+    this.unsolvedNumbers((num, tile) => {
         this.filterSuggestions(tile);
-      }
     });
   }
 
+  /**
+   * Filter out solved numbers from the suggestions + check if one of the numbers
+   * in the remaining suggestions, should be unique in a context.
+   *
+   * @param tile {array}
+   * @returns {int|array}
+   */
   filterSuggestions( tile ) {
     this.ruleOutNumbers(tile, this.contextNumbers(tile));
     this.uniqueSuggestion(tile);
@@ -234,6 +313,13 @@ export default class Sudoku {
     return num;
   }
 
+  /**
+   * Loops through all contexts of a given tile and counts how many have been solved
+   *
+   * @param tile {array}
+   * @param includeCurrent {boolean}
+   * @returns {Array}
+   */
   contextNumbers( tile, includeCurrent ) {
     const nums = [];
 
@@ -244,6 +330,13 @@ export default class Sudoku {
     return nums;
   }
 
+  /**
+   * Loops through the 3x3 square context of a given tile and return those that have been solved
+   *
+   * @param tile {array}
+   * @param includeCurrent {boolean}
+   * @returns {Array}
+   */
   squareNumbers( tile, includeCurrent ) {
     const nums = [];
 
@@ -254,6 +347,13 @@ export default class Sudoku {
     return nums;
   }
 
+  /**
+   * Loops through the row context of a given tile and return those that have been solved
+   *
+   * @param tile {array}
+   * @param includeCurrent {boolean}
+   * @returns {Array}
+   */
   rowNumbers( tile, includeCurrent ) {
     const nums = [];
 
@@ -264,6 +364,13 @@ export default class Sudoku {
     return nums;
   }
 
+  /**
+   * Loops through the column context of a given tile and return those that have been solved
+   *
+   * @param tile {array}
+   * @param includeCurrent {boolean}
+   * @returns {Array}
+   */
   columnNumbers( tile, includeCurrent ) {
     const nums = [];
 
@@ -274,41 +381,90 @@ export default class Sudoku {
     return nums;
   }
 
+  /**
+   * Loops through the entire grid and return those tiles that have not been solved
+   *
+   * @param cb {function}
+   * @returns {Array}
+   */
   unsolvedNumbers(cb) {
     const numbers = [];
 
     this.lookUpGrid((num, tile) => {
       if( !Sudoku.isNumberSolved(num) ) {
         numbers.push(num);
-        if(cb && cb(num, tile) === false) { return false; };
+        if(cb && cb(num, tile) === false) { return false; }
       }
     });
 
     return numbers;
   }
-  
+
+  /**
+   * Loops through all the contexts of a given tile and return those that have not been solved
+   *
+   * @param tile {array}
+   * @returns {Array}
+   */
   contextUnsolved( tile, cb ) {
     this.lookUpAllContexts(tile, (num, t) => {
       return !Sudoku.isNumberSolved(num) ? cb(num, t) : true;
     });
   }
 
+  /**
+   * Loops through the 3x3 square context of a given tile and return those that have not been solved
+   *
+   * @param tile {array}
+   * @returns {Array}
+   */
   squareUnsolved( tile, cb ) {
     this.lookUpSquare(tile, (num, t) => {
       return !Sudoku.isNumberSolved(num) ? cb(num, t) : true;
     });
   }
 
+  /**
+   * Loops through the row context of a given tile and return those that have not been solved
+   *
+   * @param tile {array}
+   * @returns {Array}
+   */
   rowUnsolved( tile, cb ) {
     this.lookUpRow(tile, (num, t) => {
       return !Sudoku.isNumberSolved(num) ? cb(num, t) : true;
     });
   }
 
+  /**
+   * Loops through the column context of a given tile and return those that have not been solved
+   *
+   * @param tile {array}
+   * @returns {Array}
+   */
   columnUnsolved( tile, cb ) {
     this.lookUpColumn(tile, (num, t) => {
       return !Sudoku.isNumberSolved(num) ? cb(num, t) : true;
     });
+  }
+
+  /**
+   * Find the shortest array of possibilities for a tile (choosing the first that consists of only 2 numbers)
+   *
+   * @returns {object}
+   */
+  shortestUnsolved() {
+    let shortest = null;
+
+    this.unsolvedNumbers((num, tile) => {
+      if( !shortest || num.length < shortest.num.length ) {
+        shortest = { num, tile };
+      }
+
+      if( shortest.num.length === 2 ) { return false; }
+    });
+
+    return shortest;
   }
 
   /**
@@ -343,6 +499,13 @@ export default class Sudoku {
     this.contextUnsolved(tile, (n, tile) => { this.ruleOutNumbers(tile, num); });
   }
 
+  /**
+   * Determines if a given number is found elsewhere in the given tile contexts
+   *
+   * @param tile
+   * @param num
+   * @returns {boolean}
+   */
   unique( tile, num ) {
     return !this.contextNumbers(tile).some((n) => { return n === num; });
   }
@@ -519,6 +682,12 @@ export default class Sudoku {
     return true;
   }
 
+  /**
+   * Runs through the entire grid
+   *
+   * @param cb {function}
+   * @returns {boolean}
+   */
   lookUpGrid( cb ) {
     let x = 0, y = 0;
 
@@ -533,31 +702,25 @@ export default class Sudoku {
     return true;
   }
 
-  guess() {
-    let multiChoice = {};
-
-    this.unsolvedNumbers((num, tile) => {
-      if( !multiChoice.num || num.length < multiChoice.num.length ) {
-        multiChoice = { num, tile };
-      }
-
-      if( multiChoice.num.length === 2 ) { return false; }
-    });
-
-    return this.grid = this.tryNumber(multiChoice);
-  }
-
-  tryNumber( multiChoice, index = 0 ) {
+  /**
+   * Try out all numbers of the shortest array of suggestions until as solution is found
+   * or the list is exhausted, where as it must be concluded that the board cannot be solved.
+   *
+   * These guesses are made to be nested indefinitely, as one guess might require another guess on another tile.
+   *
+   * @returns {array}
+   */
+  guess( multiChoice = this.shortestUnsolved(), index = 0 ) {
     const [x, y] = multiChoice.tile;
     const num = multiChoice.num[index];
 
     // Index out of bounds, which means all the options have been exhausted and a solution has not been fund :(
     if( !num ) { throw new Error('No solution found for the sudoku!'); }
 
-    // Copy array
+    // Copy the grid
     const grid = this.grid.map((row) => { return row.slice(); });
 
-    // try the value in the tile
+    // Try the value in the tile
     grid[y][x] = num;
 
     // Create a sub solver from the guess
@@ -568,7 +731,7 @@ export default class Sudoku {
       return guess.solve();
     } catch(ex) {
       // Attempt failed, so try next number
-      return this.tryNumber(multiChoice, index + 1);
+      return this.guess(multiChoice, index + 1);
     }
   }
 }

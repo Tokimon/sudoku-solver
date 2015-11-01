@@ -18,9 +18,7 @@ import kudoku from './kudoku.js';
 import Sudoku from './Sudoku.js';
 
 function gridToKudoku( grid ) {
-  return grid
-      .map(( row ) => { return row.join('').replace(/0/g, '.'); })
-      .join('');
+  return Sudoku.flatten(grid).replace(/0/g, '.');
 }
 
 function kudokuToGrid( kudokuStr ) {

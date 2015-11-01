@@ -12,6 +12,28 @@ of the board, with or without field notes (yeah it actually has field notes) and
 
 It is written in ES 6 so be sure to enable you loyal transpiler if you like to use it.
 
+## Usage
+The puzzle grid is given by a multidimentional array, with empty tiles marked with a zero (0).
+
+```javascript
+const grid =[
+  [0,7,6, 0,1,0, 0,4,3],
+  [0,0,0, 7,0,2, 9,0,0],
+  [0,9,0, 0,0,6, 0,0,0],
+  
+  [0,0,0, 0,6,3, 2,0,4],
+  [4,6,0, 0,0,0, 0,1,9],
+  [1,0,5, 4,2,0, 0,0,0],
+  
+  [0,0,0, 2,0,0, 0,9,0],
+  [0,0,4, 8,0,7, 0,0,1],
+  [9,1,0, 0,5,0, 7,2,0]
+];
+
+const sudoku = new Sudoku(grid);
+const result = sudoku.solve();
+```
+
 ## Tests
 
     $ npm test

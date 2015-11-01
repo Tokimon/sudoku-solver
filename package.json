@@ -1,0 +1,24 @@
+{
+  "name": "sudoku-solver",
+  "version": "1.0.0",
+  "description": "Solver for sudoku puzzels",
+  "main": "Sudoku.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel/register ./sudoku-solver.spec.js"
+  },
+  "keywords": [
+    "Sudoku",
+    "Solve"
+  ],
+  "author": "Toke Voltelen",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^5.8.29",
+    "chai": "^3.4.0",
+    "mocha": "^2.3.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.0.12",
+    "babel-core": "^6.0.12"
+  }
+}

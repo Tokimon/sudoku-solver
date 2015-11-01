@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "description": "Solver for sudoku puzzels",
   "main": "Sudoku.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tokimon/sudoku-solver"
+  },
   "scripts": {
     "test": "mocha --compilers js:babel/register ./sudoku-solver.spec.js"
   },
   "keywords": [
     "Sudoku",
-    "Solve"
+    "Solver"
   ],
   "author": "Toke Voltelen",
   "license": "ISC",

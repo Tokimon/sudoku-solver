@@ -8,7 +8,7 @@ Challange accepted and VOILA!!
 
 It might be more elaborate than your average solver, but many of the feature has been included due to heavy debugging
 (I suck at sudoku normally). At least now it has a lot of nifty features, such as getting a string representation
-of the board, with or without field notes (yeah it actually has that as well).
+of the board, with or without field notes (yeah it actually has field notes) and pretty error reporting.
 
 It is written in ES 6 so be sure to enable you loyal transpiler if you like to use it.
 

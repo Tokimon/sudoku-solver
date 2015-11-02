@@ -26,7 +26,7 @@ export default class Sudoku {
    * @returns {string}
    */
   static flatten( arr ) {
-    return arr.map((sub) => { return Array.isArray(sub) ? sub.join(',') : sub; }).join(',')
+    return arr.map((sub) => { return Array.isArray(sub) ? sub.join('') : sub; }).join('');
   }
 
   /**

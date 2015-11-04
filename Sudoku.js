@@ -36,7 +36,7 @@ export default class Sudoku {
     this.lookUpGrid((num, tile) => {
       if( num === 0 ) {
         const usedNums = this.contextNumbers(tile);
-        const suggestions = [1,2,3,4,5,6,7,8,9].filter((i) => { return !usedNums.includes(i); });
+        const suggestions = [1,2,3,4,5,6,7,8,9].filter((i) => { return usedNums.indexOf(i) < 0; });
 
         this.tileNumber(tile, suggestions);
       }
@@ -182,7 +182,7 @@ export default class Sudoku {
     if( nums.length < 9 ) { throw new Error(`Square not completed: ${tile}`); }
 
     nums.reduce((arr, i) => {
-      if( arr.includes(i) ) { throw new Error(`Square has duplicate numbers: ${tile} : ${i}`); }
+      if( arr.indexOf(i) > -1 ) { throw new Error(`Square has duplicate numbers: ${tile} : ${i}`); }
       arr.push(i);
       return arr;
     },[]);
@@ -201,7 +201,7 @@ export default class Sudoku {
     if( nums.length < 9 ) { throw new Error(`Row not completed: ${tile}`); }
 
     nums.reduce((arr, i) => {
-      if( arr.includes(i) ) { throw new Error(`Row has duplicate numbers: ${tile} : ${i}`); }
+      if( arr.indexOf(i) > -1 ) { throw new Error(`Row has duplicate numbers: ${tile} : ${i}`); }
       arr.push(i);
       return arr;
     },[]);
@@ -221,7 +221,7 @@ export default class Sudoku {
     if( nums.length < 9 ) { throw new Error(`Column not completed: ${tile}`); }
 
     nums.reduce((arr, i) => {
-      if( arr.includes(i) ) { throw new Error(`Column has duplicate numbers: ${tile} : ${i}`); }
+      if( arr.indexOf(i) > -1 ) { throw new Error(`Column has duplicate numbers: ${tile} : ${i}`); }
       arr.push(i);
       return arr;
     },[]);
@@ -486,7 +486,7 @@ export default class Sudoku {
     if( !numbers || numbers.length === 0 ) { return currNum; }
 
     // Filter out the numbers from the suggestions
-    return this.tileNumber(tile, currNum.filter((n) => { return !numbers.includes(n); }));
+    return this.tileNumber(tile, currNum.filter((n) => { return numbers.indexOf(n) < 0; }));
   }
 
   /**
@@ -541,7 +541,7 @@ export default class Sudoku {
 
           // 2. Compared number is a suggestion array as well,
           //    so check if the current suggestion number exists in those suggestions
-          return !n.includes(num);
+          return n.indexOf(num) < 0;
         }
 
         // 3. The number matched, which means it has to be ruled out when we are done,

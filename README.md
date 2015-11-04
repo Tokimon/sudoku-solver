@@ -40,3 +40,7 @@ const result = sudoku.solve();
 
 I have borrowed the awesome [Kudoku](http://attractivechaos.github.io/plb/kudoku.html) solver to compare results against.
 So big thanks to [attractivechaos](https://github.com/attractivechaos) for that.
+
+
+## Update
+I later read [this article](http://norvig.com/sudoku.html) that states that I was on the right path when I solve the sudoku. Good to know :)

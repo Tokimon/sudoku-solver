@@ -710,28 +710,36 @@ export default class Sudoku {
    *
    * @returns {array}
    */
-  guess( multiChoice = this.shortestUnsolved(), index = 0 ) {
+  guess( multiChoice ) {
+    multiChoice = multiChoice || this.shortestUnsolved();
+
+    const len = multiChoice.num.length;
+
+    // If all the options have been exhausted a solution has not been fund :(
+    if( !len ) { throw new Error('No solution found for the sudoku!'); }
+
+    const index = Math.floor(Math.random() * len);
     const [x, y] = multiChoice.tile;
     const num = multiChoice.num[index];
 
-    // Index out of bounds, which means all the options have been exhausted and a solution has not been fund :(
-    if( !num ) { throw new Error('No solution found for the sudoku!'); }
-
     // Copy the grid
-    const grid = this.grid.map((row) => { return row.slice(); });
+    const grid = this.grid.map((row) => {
+      return row.map((col) => { return Array.isArray(col) ? col.slice() : col; });
+    });
 
     // Try the value in the tile
     grid[y][x] = num;
 
     // Create a sub solver from the guess
-    const guess = new Sudoku(grid, `${this.name}:guess`);
+    const subguess = new Sudoku(grid, `${this.name}:guess`);
 
     try {
       // try to solve the sudoku with this grid, if it fails we try another number
-      return guess.solve();
+      return subguess.solve();
     } catch(ex) {
-      // Attempt failed, so try next number
-      return this.guess(multiChoice, index + 1);
+      // Attempt failed, so exclude the number from the array
+      multiChoice.num.splice(index, 1);
+      return this.guess(multiChoice);
     }
   }
 }

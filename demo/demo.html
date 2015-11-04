@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>Sudoku demo</title>
+
+	<style>
+		body {
+			text-align: center;
+			font-family: arial, sans-serif;
+		}
+
+		#SudokuBoard {
+			table-layout: fixed;
+			border-collapse: collapse;
+			margin: 50px auto 0;
+		}
+
+		#SudokuBoard td {
+			text-align: center;
+			vertical-align: middle;
+			width: 50px;
+			height: 50px;
+			font-size: 15px;
+			border: 1px solid #000;
+		}
+
+		#SudokuBoard td:first-child {
+			border-left-width: 4px;
+		}
+
+		#SudokuBoard td:nth-child(3n) {
+			border-right-width: 4px;
+		}
+
+		#SudokuBoard tr:first-child td {
+			border-top-width: 4px;
+		}
+
+		#SudokuBoard tr:nth-child(3n) td{
+			border-bottom-width: 4px;
+		}
+
+		#Grids {
+			position: absolute;
+			top: 50px;
+			left: 50px;
+			text-align: left;
+		}
+
+		#Grids div {
+			cursor: pointer;
+			margin-bottom: 5px;;
+		}
+
+		#Timer {
+			margin: 15px auto;
+			height: 30px;
+			line-height: 30px;
+		}
+
+		.button {
+			border-radius: 5px;
+			padding: 10px 30px;
+			color: #fff;
+			background: linear-gradient(0deg, #026418, #02B31F);
+			box-shadow: 0 -3px 10px rgba(0,0,0, .4);
+			display: inline-block;
+			border: 1px solid #fff;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+
+<section id="Grids">
+	<h2>Load grid</h2>
+
+</section>
+
+<table id="SudokuBoard">
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+</table>
+
+<div id="Timer"></div>
+
+<div class="button">SOLVE</div>
+
+<script src="./demo.js"></script>
+<script> window.demo(); </script>
+
+</body>
+</html>
